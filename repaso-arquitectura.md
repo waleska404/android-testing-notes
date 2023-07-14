@@ -48,9 +48,17 @@
 	- Notificar de los cambios en la información, a través de funciones `suspend` en caso de operaciones únicas, o `flows` en caso de varios valores.
 	- Todas los métodos en esta capa tienen que ser seguros para llamarlos desde el Main thread. Esto quiere decir que si es necesario cambiar de hilo para la ejecución, será la capa de datos la encargada de cambiar el hilo de ejecución.
 
-- En la capa de datos puede haber una BD, en este caso utilizaremos room:
+- En la capa de datos puede haber una BD, en este caso utilizaremos `room`:
 
 	![room](./images/room.png)
+
+	- `Entities`: las tablas de una BD.
+	- `Data Acces Objects`: como accedemos a esas tablas o entities. Lenguaje SQL. En el caso de los DAOs, peticiones en SQL representadas como una función (mapean la función con la petición SQL).
+	- `Room Database`: la BD completa.
+
+- Para acceder a datos remotos, en este caso vamos a utilizar `retrofit`: Nos permite definir una interfaz que mapee las peticiones al servidor a través de funciones.
+
+- En el acceso a datos, siempre debe haber una única fuente de verdad. Que la información que muestre la UI venga de solo un sitio, porque sino lo que puede pasar es que haya desincronización en los datos que se muestran.
 
 
 
