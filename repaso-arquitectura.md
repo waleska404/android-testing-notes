@@ -31,3 +31,32 @@
 ---------------------------------------------------------
 
 ![capa UI details](./images/capa_ui_details.png)
+
+
+## Capa de Datos:
+
+- Se basa princpialmente en la siguiente estructura:
+
+![capa data](./images/capa_data.png)
+
+---------------------------------------------------------
+
+![capa data details](./images/capa_data_detail.png)
+
+
+- Funciones de la capa de datos:
+	- Notificar de los cambios en la información, a través de funciones `suspend` en caso de operaciones únicas, o `flows` en caso de varios valores.
+	- Todas los métodos en esta capa tienen que ser seguros para llamarlos desde el Main thread. Esto quiere decir que si es necesario cambiar de hilo para la ejecución, será la capa de datos la encargada de cambiar el hilo de ejecución.
+
+- En la capa de datos puede haber una BD, en este caso utilizaremos room:
+
+	![room](./images/room.png)
+
+
+
+
+
+
+
+
+
