@@ -27,4 +27,7 @@
 - Se basa principalmente la siguiente estructura:
 
 ![capa UI](./images/capa_ui.png)
+
+---------------------------------------------------------
+
 ![capa UI details](./images/capa_ui_details.png)
