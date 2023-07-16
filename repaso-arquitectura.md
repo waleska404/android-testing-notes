@@ -101,6 +101,53 @@
 - `Modelos`: Estructuras de datos de cada capa. Transformaciones al pasar de una capa a otra (mapper).
 
 
+## Inyección de Dependencias:
+
+
+- En este caso utilizaremos `hilt`.
+
+
+![hilt 1](./images/hilt1.png)
+![hilt 2](./images/hilt2.png)
+![hilt 3](./images/hilt3.png)
+![hilt 4](./images/hilt4.png)
+![hilt 5](./images/hilt5.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
