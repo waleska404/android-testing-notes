@@ -60,6 +60,7 @@
 
 - En el acceso a datos, siempre debe haber una única fuente de verdad. Que la información que muestre la UI venga de solo un sitio, porque sino lo que puede pasar es que haya desincronización en los datos que se muestran.
 
+
 ## Capa de Dominio:
 
 - Mediante esta capa los `ViewModels` (capa UI) se comunicaran con los datos (capa datos).
@@ -71,6 +72,33 @@
 - Un caso de uso puede depender de otros casos de uso y utilizarlos según los necesite o proveerse con acceso a la capa de datos a través de los repositorios.
 
 - Un caso de uso puede tener uno, o varios repositorios según los necesite.
+
+
+## Clean Architecture:
+
+![clean architecture 1](./images/clean1.png)
+![clean architecture 2](./images/clean2.png)
+
+- `Capa de Presentación` (Presentation en el esquema 2): Donde tenemos tanto la UI como los ViewModels.
+- `Capa de Casos de Uso` (Use Cases en el esquema 2): 
+- `Capa de Casos Datos` (Data en el esquema 2): 
+- `Capa de Entities o de Domain` (Entities en el esquema 2): Se almacena las entidades propias de nuestro negocio y también toda la lógica de negocio. Entendiendo como lógica de negocio, todo ese código que representa cosas que tendría que hacer cualquier aplicación que implementaramos en nuestro negocio. Algoritmos típicos de cálculo de datos, modelos de nuestra aplicación, etc.
+- `Capa de Framework` (Framework en el esquema 2): La parte en la que se interactúa con todas las librerías de terceros.
+
+- Un esquema más específico para el ejemplo que veremos:
+![clean architecture 3](./images/clean3.png)
+
+### Conceptos en clean architecture:
+
+- `Capas`: Unidades de lógica común que se comunican con otras capas mediante fronteras. Esto nos permite limitar la visibilidad.
+- `Interacción`: Cómo las capas interactúan entre sí. Las capas más internas no conocen a las externas, aunque hay interacciones que si que tienen que ir hacia fuera. Para ello, invertimos las dependencias.
+- `Fronteras`: Puntos de conexión entre las distintas capas. 
+	- `Dependencia directa`: pueden ser clases concretas.
+	- `Dependencia invertida`: interfaz con la que comunicarse. La capa interna define una interfaz, y la capa externa la implementa.
+
+![clean architecture 4](./images/clean4.png)
+
+- `Modelos`: Estructuras de datos de cada capa. Transformaciones al pasar de una capa a otra (mapper).
 
 
 
