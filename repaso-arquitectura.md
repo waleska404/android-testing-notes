@@ -60,6 +60,17 @@
 
 - En el acceso a datos, siempre debe haber una única fuente de verdad. Que la información que muestre la UI venga de solo un sitio, porque sino lo que puede pasar es que haya desincronización en los datos que se muestran.
 
+## Capa de Dominio:
+
+- Mediante esta capa los `ViewModels` (capa UI) se comunicaran con los datos (capa datos).
+
+![capa dominio](./images/capa_dominio.png)
+
+- Con esta capa podremos reutilizar un caso de uso, en caso de que se utilice en varias pantallas.
+
+- Un caso de uso puede depender de otros casos de uso y utilizarlos según los necesite o proveerse con acceso a la capa de datos a través de los repositorios.
+
+- Un caso de uso puede tener uno, o varios repositorios según los necesite.
 
 
 
