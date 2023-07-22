@@ -64,8 +64,33 @@
 	- No es muy sencillo de implementar cuando estás empezando con el testing.
 
 
+## ¿Qué debería testear?:
+
+- Hay varias filosofías:
+	- 100% covearge.
+		- Puede dar una falsa sensación de seguridad. Que en los tests se ejecuten el 100% de las lineas de código no quiere decir que todo esté probado.
+	- 100% de posibles estados.
+	- Testear solo lo que aporte valor.
+	- Crear tests de los bugs que se produzcan.
 
 
+## Las dos corrientes del testing:
+
+- LONDRES o Mockist:
+	- Es la más moderna. Surgió entre el grupo de personas que inventó el concepto de mocking.
+	- Rara vez usan clases reales en las dependencias para los tests.
+	- La mayoría de las veces usan exclusivamente mocks como test doubles en los tests unitarios.
+	- Los tests unitarios afectan a calses individuales (incluso funciones), el resto se mockea para testear la clase de forma aislada.
+	- Un test de integración es un test en el que hay más de una clase real involucrada.
+	- Tiende más a los tests de caja blanca.
+
+- DETROIT o Classic/Classicist
+	- Siempre usan clases reales en los tests cuando es posible.
+	- Si no, recurren a dobles de tests hechos a mano.
+	- Un test unitario no tiene por qué afectar a una única clase. De hecho, lo normal es que colaboren varias clases en el test, debido al primer punto.
+	- Lo que realmente identifica un test unitario es que se ejecute de forma aislada y no afecte a otros tests.
+	- Un test de integración prueba cómo se comporta nuestro código con sistemas de memoria compartida (bases de datos, acceso a servidores, etc), y cuanto más reales sean esos sistemas, mejor.
+	- Tiende más a los tests de caja negra.
 
 
 
