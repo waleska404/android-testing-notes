@@ -49,3 +49,42 @@
 	}
 
 	```
+
+
+## Stub:
+
+- Se utilizan para simular el comportamiento de una dependencia en un entorno de pruebas.
+- Proporcionan respuestas predefinidas para ciertas entradas, son muy útiles para probar como se comporta la aplicación en diferentes esecenarios.
+- Devuelven el mismo valor independientemente del contexto.
+- Puede tener una pequeña lógica en función del valor de entrada.
+- Se diferencia del `dummy` en que en este caso, si que vamos a utilizar el valor de returno del doble de test `stub`.
+	```
+	interface DiscountService {
+		fun getDiscount(costumer: Costumer): Double
+	}
+
+	class DiscountServiceStub : DiscountService {
+		override fun getDiscount(customer: Customer): Double = 0.1
+	}
+
+	class Customer {
+		fun getDiscount(discountService: DiscountService): Double = discountService.getDiscount(this) // this = costumer
+	}
+
+	fun main() {
+		val customer = Costumer()
+		val discountService = DiscountServiceStub()
+		customer.getDiscount(discountService)
+	}
+	```	
+
+
+
+
+
+
+
+
+
+
+
