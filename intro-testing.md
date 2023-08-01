@@ -93,8 +93,13 @@
 	- Tiende más a los tests de caja negra.
 
 
+## Estructura de un test:
 
+1. Condiguración: Given/Arrange
+2. Ejecución: When/Act
+3. Verificación: Then/Assert
 
+![test](./images/test.png)
 
 
 
