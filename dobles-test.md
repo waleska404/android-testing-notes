@@ -156,6 +156,13 @@
 	}
 	```
 
+## Mock:
 
+- También verifican el comportamiento.
+- No se basan en la implementación real.
+- Control total del comportamiento durante los tests. No solo nos permiten verificar datos, sino también configurar qué queremos que ocurra cuando se llame a alguna de sus funciones, qué valores queremos que se devuelvan.
+- Uso de librerías como Mockito o MockK.
+- Verificar que se ha llamado a cierta función con ciertos valores.
 
+![mock](./images/mock.png)
 
