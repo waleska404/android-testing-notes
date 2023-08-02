@@ -166,3 +166,22 @@
 
 ![mock](./images/mock.png)
 
+
+## Tests de estado vs interacción:
+
+- Dobles de Estado: Dummy, Stub, Fake. -> Tests de caja negra: Sobreviven a refactorizaciones pero hay algunos tests que no se pueden implementar (por ejemplo los de interacción/verificación).
+- Dobles de Interacción: Spy, Mock. -> Tests de caja blanca: Más frágiles porque se basan en la implementación específica, si cualquier detalle de esta implementación cambia, seguramente el test deje de compilar.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
