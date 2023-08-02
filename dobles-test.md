@@ -79,6 +79,45 @@
 	```	
 
 
+## Fake:
+
+- Imitan el comportamiento real.
+- Implementación simplificada.
+- Útiles cuando la dependencia es compleja o cuesta mucho trabajo configurarla para un entorno de pruebas.
+- El típico ejemplo de un `fake` es la base de datos, persistirla en memoria como por ejemplo en un array en vez de en disco.
+- La principal diferencia con los anteriores es que se asemejan más a la realidad y suelen ser más reutilizables.
+
+	```
+	class Email
+
+	interface EmailService {
+		fun sendEmail(email: Email)
+		fun getSentEmails(): List<Email>
+	}
+
+	class EmailServiceFake: EmailService {
+
+		private val sentEmails = mutableListOf<Email>()
+
+		override fun sendEmail(email: Email) {
+			sentEmails.add(email)
+		}
+
+		override fun getSentEmails(): List<Email> = sentEmails
+	}
+
+	class Customer {
+		fun sendEmail(emailService: EmailService, email: Email) {
+			emailService.sendEmail(email)
+		}
+	}
+
+	fun main() {
+		val customer = Customer()
+		val emailService = EmailServiceFake()
+		customer.getDiscount(discountService)
+	}
+	```
 
 
 
