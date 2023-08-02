@@ -120,9 +120,41 @@
 	```
 
 
+## Spy:
 
+- Registran el comportamiento de una dependencia durante una prueba.
+- Permiten verificar su correcto funcionamiento.
+- Mientras que un `fake` comprueba que el estado final es el correcto (imita el comportamiento), un `spy` comprueba que se ha llamado a las funciones correspondientes (registra el comportamiento).
 
+	```
+	class Product
 
+	interface ShoppingCart {
+		fun addItem(product: Product)
+	}
+
+	class ShoppingCartSpy : ShoppingCart {
+		var addItemCalled = false
+
+		override fun addItem(product: Product) {
+			addItemCalled = true
+		}
+	}
+
+	class Customer {
+		fun addItemToCart(shoppingCart: ShoppingCart, product: Product) {
+			shoppingCart.addItem(product)
+		}
+	}
+
+	fun main() {
+		val customer = Customer()
+		val shoppingCart = ShoppingCartSpy()
+		customer.addItemToCart(shoppingCart, Product())
+
+		assertTrue(shoppingCart.addItemCalled)
+	}
+	```
 
 
 
