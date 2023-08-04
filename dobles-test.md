@@ -240,6 +240,52 @@ interface MoviesRemoteDataSource {
 	```
 
 
+- Ahora queremos probar un caso en el que el remoto devuelve las peliculas porque en el local no hay nada:
+	- También queremos probar que las peliculas se almacenan correctamente en el local.
+	- Tenemos que transformar el `stub` en un `fake` -> `MoviesLocalDataSourceFake` simulando que es un componente real pero con una implementación simplificada.
+	- El remote ahora tiene que devolver valores por tanto transformamos el `dummy` en un `stub` -> `MoviesRemoteDataSourceStub`.
+	```
+	class MoviesRemoteDataSourceStub: MoviesRemoteDataSource {
+    	override fun findPopularMovies(): List<Movie> = listOf(
+        	Movie(1, "Movie 1"),
+        	Movie(2, "Movie 2")
+    	)
+	}
+
+	class MoviesLocalDataSourceFake: MoviesLocalDataSource {
+    	private val movies = mutableListOf<Movie>()
+    	override fun isEmpty(): Boolean = movies.isEmpty()
+    	override fun findAll(): List<Movie> = movies
+    	override fun saveAll(movies: List<Movie>) {
+        	this.movies.addAll(movies)
+    	}
+	}	
+
+	class SampleTest {
+    	@Test
+    	fun `getMovies() returns a list of local movies if local data source is not empty`() {
+        	val moviesLocalDataSource = MoviesLocalDataSourceFake()
+        	val moviesRemoteDataSource = MoviesRemoteDataSourceStub()
+        	val moviesRepository = MoviesRepository(moviesLocalDataSource, moviesRemoteDataSource)
+
+        	val movies = moviesRepository.findAll()
+
+        	assertEquals(1, movies[0].id)
+    	}
+
+    	@Test
+    	fun `findAll() returns a list of remote movies if local data source is empty`() {
+        	val moviesLocalDataSource = MoviesLocalDataSourceFake()
+        	val moviesRemoteDataSource = MoviesRemoteDataSourceStub()
+        	val moviesRepository = MoviesRepository(moviesLocalDataSource, moviesRemoteDataSource)
+
+        	val movies = moviesRepository.findAll()
+
+        	assertEquals(1, movies[0].id)
+        	assertEquals(2, movies[1].id)
+    	}
+	}
+	```
 
 
 
