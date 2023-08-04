@@ -173,8 +173,71 @@
 - Dobles de Interacción: Spy, Mock. -> Tests de caja blanca: Más frágiles porque se basan en la implementación específica, si cualquier detalle de esta implementación cambia, seguramente el test deje de compilar.
 
 
+## Ejemplos:
 
+- Dado el siguiente código:
 
+```
+class MoviesRepository(
+    private val moviesLocalDataSource: MoviesLocalDataSource,
+    private val moviesRemoteDataSource: MoviesRemoteDataSource
+) {
+
+    fun findAll(): List<Movie> {
+        if (moviesLocalDataSource.isEmpty()) {
+            val movies = moviesRemoteDataSource.findPopularMovies()
+            moviesLocalDataSource.saveAll(movies)
+        }
+        return moviesLocalDataSource.findAll()
+    }
+
+}
+
+interface MoviesLocalDataSource {
+    fun isEmpty(): Boolean
+    fun saveAll(movies: List<Movie>)
+    fun findAll(): List<Movie>
+}
+
+interface MoviesRemoteDataSource {
+    fun findPopularMovies(): List<Movie>
+}
+```
+
+- Para hacer un test que retorne las peliculas de fuente local si esta no está vacía:
+	- En este caso voy a querer los datos de local, por tanto el remote data source puede ser un dummy -> `MoviesRemoteDataSourceDummy`
+	- El local si que necesito que devuelva algo, por lo menos un estado, en este caso puede ser siempre el mismo valor -> `MoviesLocalDataSourceStub` 
+	- La función `saveAll` de `MoviesLocalDataSourceStub` la podemos dejar con un to do porque en este caso no lo vamos a usar.
+
+	```
+	class MoviesRemoteDataSourceDummy: MoviesRemoteDataSource {
+    	override fun findPopularMovies(): List<Movie> {
+        	TODO("not yet implemented")
+    	}
+	}
+
+	class MoviesLocalDataSourceStub: MoviesLocalDataSource {
+    	override fun isEmpty(): Boolean = false
+    	override fun saveAll(movies: List<Movie>) {
+        	TODO("Not yet implemented")
+    	}
+    	override fun findAll(): List<Movie> = listOf(Movie(1, "Movie 1"))
+	}
+
+	class SampleTest {
+
+    	@Test
+    	fun `getMovies() returns a list of local movies if local data source is not empty`() {
+        	val moviesLocalDataSource = MoviesLocalDataSourceStub()
+        	val moviesRemoteDataSource = MoviesRemoteDataSourceDummy()
+        	val moviesRepository = MoviesRepository(moviesLocalDataSource, moviesRemoteDataSource)
+
+        	val movies = moviesRepository.findAll()
+
+        	assertEquals(1, movies[0].id)
+    	}
+	}
+	```
 
 
 
