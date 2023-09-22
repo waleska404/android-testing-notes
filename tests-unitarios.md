@@ -39,7 +39,36 @@
 
 ## Mockito
 
-- 
+- Framework para crear mocks de forma automática.
+
+- Permiten verificar qué funciones han sido llamadas, cuántas veces y con qué valores.
+
+- Para utilizar Mockito tenemos que añadir dos librerías:
+	![mockito libreria](./images/mockito_libreria.png)
+
+- Hay dos formas de usar Mockito: 
+	- Con anotaciones.
+	- Con un DSL.
+
+- Mockito con anotaciones:
+	- Primero indicamos que los test se van a ejecutar con el `MockitoJUnitRunner`, que es un runner especial de Mockito capaz de leer las anotaciones e inyectar los mocks en los puntos donde indiquemos.
+	- Cuando queremos crear un mock lo indicamos con la anotación `@Mock`. Luego en la función de `setUp` le damos los valores que queramos al mock (o en el given/arrange dentro de cada test).
+	![mockito anotaciones](./images/mockito_anotaciones.png)
+
+- Mockito con DSL:
+	- Utilizamos la función `mock` y abrimos llaves para indicarle los valores que queremos de retorno.
+	![mockito dsl](./images/mockito_dsl.png)
+
+- Verificaciones:
+	- Utilizamos las funciones, `verify` y `verifyBlocking` para corrutinas.
+	![mockito verify](./images/mockito_verify.png)
+
+	- Con estas funciones podemos comprobar si un valor es uno en concreto, o que se ha llamado a una función con cualquier tipo de objeto, y también cuantas veces se ha llamado a esa función con ese valor.
+
+- Argument Captor: esta funcionalidad nos permite capturar los valores con los que se llama a una función y hacer aserciones sobre ese valor capturado.
+	![mockito captor](./images/mockito_captor.png)
+
+
 
 
 
