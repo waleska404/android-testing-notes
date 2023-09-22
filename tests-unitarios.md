@@ -24,4 +24,42 @@
 	![junit libreria](./images/junit_libreria.png)
 
 - Por defecto los tests deben ir bajo la carpeta `test` que hay dentro de `src`. Se puede modificar mediante `gradle`.
-	![junit libreria](./images/carpeta_defecto.png)
+	![carpeta defecto](./images/carpeta_defecto.png)
+
+
+## Estructura de los tests
+
+- Dentro de la clase tendremos un par de funciones opcionales que nos permitirán ejecutar acciones justo antes y después de cada test. Si por ejemplo dentro de una clase tenemos cuatro funciones marcadas con el `@Test`, la función marcada con `@Before` se ejecutará cuatro veces, una antes de cada test, y de la misma manera para la función marcada con `@After`:
+	![after before](./images/after_before.png)
+
+
+- Después añadimos los tests necesarios:
+	![test estructura](./images/test_estructura.png)
+
+
+## Mockito
+
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
