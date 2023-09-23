@@ -146,13 +146,211 @@
 	![rules orden](./images/rules_orden.png)
 
 
+## Tests de ViewModels
 
 
+- Ejemplo de test para `GamesViewModel`:
+	- Como utilizamos corutinas, hacemos uso de las rules previamente creadas para sustituir el hilo principal por el hilo de tests.
+	- Como llamamos a funciones `suspend` necesitamos estar en un bloque de corutinas. El sustituto del `runBlocking` en los test, es `runTest`. Este último no va a empezar a ejecutar las funciones `suspend` hasta que no avancemos en el tiempo dentro de los tests, lo que nos permite posicionarnos en ciertos momentos del tiempo, y hacer comprobaciones en ese momento particular.
+
+	```
+	@OptIn(ExperimentalCoroutinesApi::class)
+	class GamesViewModelTest {
+
+    	@get:Rule
+    	val coroutinesTestRule = CoroutinesTestRule()
+
+    	@Test
+    	fun `when view model is created, then call get games`() = runTest {
+        	val expectedGames = listOf(VideoGame(1, "name", 1.0, "image", Date()))
+        	val getPopularGamesUseCase: GetPopularGamesUseCase = mockk()
+        	every { getPopularGamesUseCase() } returns flowOf(expectedGames)
+        	val viewModel = GamesViewModel(getPopularGamesUseCase)
+
+        	viewModel.state.test {
+            	assertEquals(GamesViewModel.UiState(), awaitItem())
+
+            	viewModel.onUiReady()
+            	assertEquals(GamesViewModel.UiState(isLoading = true), awaitItem())
+            	assertEquals(GamesViewModel.UiState(games = expectedGames), awaitItem())
+        	}
+
+    	}
+	}
+	```	
+
+	```
+	@HiltViewModel
+	class GamesViewModel @Inject constructor(
+    	private val getPopularGamesUseCase: GetPopularGamesUseCase
+	) :
+    	ViewModel() {
+
+    	private val _state = MutableStateFlow(UiState())
+    	val state = _state.asStateFlow()
+
+    	fun onUiReady() {
+        	viewModelScope.launch {
+            	_state.value = UiState(isLoading = true)
+            	getPopularGamesUseCase().collect {
+                	_state.value = UiState(games = it, isLoading = false)
+            	}
+        	}
+    	}
+
+    	data class UiState(
+        	val games: List<VideoGame> = emptyList(),
+        	val isLoading: Boolean = false,
+    	)
+	}
+	```
+
+	```
+	@OptIn(ExperimentalCoroutinesApi::class)
+	class CoroutinesTestRule : TestWatcher() {
+
+    	val testDispatcher = StandardTestDispatcher()
+
+    	override fun starting(description: Description) {
+        	super.starting(description)
+        	Dispatchers.setMain(testDispatcher)
+    	}
+
+    	override fun finished(description: Description) {
+        	super.finished(description)
+        	Dispatchers.resetMain()
+    	}
+	}
+	```
 
 
+- Ejemplo de test para `BoardViewModel`:
+	
+	```
+	@OptIn(ExperimentalCoroutinesApi::class)
+	class BoardViewModelTest {
 
+    	@get:Rule
+    	val coroutinesTestRule = CoroutinesTestRule()
 
+    	@get:Rule
+    	val mockkRule = MockKRule(this)
 
+    	@MockK
+    	lateinit var makeBoardMoveUseCase: MakeBoardMoveUseCase
+
+    	@MockK
+    	lateinit var getCurrentBoardUseCase: GetCurrentBoardUseCase
+
+    	@MockK
+    	lateinit var addScoreUseCase: AddScoreUseCase
+
+    	@MockK
+    	lateinit var resetBoardUseCase: ResetBoardUseCase
+
+    	ateinit var viewModel: BoardViewModel
+
+    	@Before
+    	fun setUp() {
+        	every { getCurrentBoardUseCase() } returns flowOf(TicTacToe())
+        	viewModel = BoardViewModel(
+            	makeBoardMoveUseCase,
+            	getCurrentBoardUseCase,
+            	addScoreUseCase,
+            	resetBoardUseCase
+        	)
+    	}
+
+    	@Test
+    	fun `at the beginning, the game is not started`() = runTest {
+        	assertEquals(GameState.NotStarted, viewModel.state.value.gameState)
+    	}
+
+    	@Test
+   		fun `when start game is called, game state is in progress`() = runTest {
+        	viewModel.startGame()
+
+        	runCurrent()
+
+        	assertEquals(GameState.InProgress, viewModel.state.value.gameState)
+    	}
+
+    	@Test
+    	fun `when reset is called, then the game is cleared`() = runTest {
+        	coJustRun { resetBoardUseCase() }
+
+        	viewModel.resetGame()
+
+        	runCurrent()
+
+        	coVerify { resetBoardUseCase() }
+    	}
+
+    	@Test
+    	fun `move is recorded by use case`() = runTest {
+
+        	val slot1 = slot<Int>()
+        	val slot2 = slot<Int>()
+        	coJustRun { makeBoardMoveUseCase(capture(slot1), capture(slot2)) }
+
+        	viewModel.move(0, 1)
+
+        	runCurrent()
+
+        	assertEquals(0, slot1.captured)
+        	assertEquals(1, slot2.captured)
+    	}
+	}
+	```
+
+	```
+	@HiltViewModel
+	class BoardViewModel @Inject constructor(
+    	private val makeBoardMoveUseCase: MakeBoardMoveUseCase,
+    	private val getCurrentBoardUseCase: GetCurrentBoardUseCase,
+    	private val addScoreUseCase: AddScoreUseCase,
+    	private val resetBoardUseCase: ResetBoardUseCase
+	) : ViewModel() {
+
+    	private val _state = MutableStateFlow(UiState())
+    	val state = _state .asStateFlow()
+
+    	fun startGame() {
+        	viewModelScope.launch {
+            	getCurrentBoardUseCase().collect { board ->
+                	_state.value = UiState(
+                    	ticTacToe = board,
+                    	gameState = when (val winner = board.findWinner()) {
+                        	null -> GameState.InProgress
+                        	else -> {
+                            	addScoreUseCase(board)
+                            	GameState.Finished(winner)
+                        	}
+                    	}
+                	)
+            	}
+        	}
+    	}
+
+    	fun move(row: Int, column: Int) {
+        	viewModelScope.launch {
+            	makeBoardMoveUseCase(row, column)
+        	}
+    	}
+
+    	fun resetGame() {
+        	viewModelScope.launch {
+            	resetBoardUseCase()
+            	startGame()
+        	}
+    	}
+
+    	data class UiState(
+        	val ticTacToe: TicTacToe = TicTacToe(),
+        	val gameState: GameState = GameState.NotStarted
+    	)
+	}
+	```
 
 
 
