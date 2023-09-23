@@ -45,6 +45,7 @@
 
 - Para utilizar Mockito tenemos que añadir dos librerías:
 	![mockito libreria](./images/mockito_libreria.png)
+	* En principio para ls versión 5.0.0 de Mockito Kotlin, ya utiliza y añade por su cuenta Mockito inline, de manera que sería suficiente con solo añadir la librería para Mockito Kotlin.
 
 - Hay dos formas de usar Mockito: 
 	- Con anotaciones.
