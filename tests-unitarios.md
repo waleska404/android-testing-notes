@@ -128,6 +128,26 @@
 		- Los StateFlows son `conflated`, esto quiere decir que los valores intermedios se pierden si el observador es más lento que el emisor. Esto a nivel de tests puede ser un inconveniente ya que a veces podemos necesitar saber cuales han sido los valores intermedios.
 
 
+## Rules
+
+- Son puntos de control donde podemos ejecutar código en función de la situación actual del test.
+
+- Simplifican la reutilización de código:
+	- Control antes y después del test.
+	- Sustituyen `@Before` y `@After`.
+
+- Algunas de las librerías nos proporcionan algunas rules, por ejemplo la que ya hemos mencionado:
+	![livedata rule](./images/livedata_rule.png)
+
+- También podemos crear nuestras propias rules:
+	![rules propias](./images/rules_propias.png)
+
+- Para definir el orden de ejecución podemos utilizar el argumento que recibe la anotación rule.
+	![rules orden](./images/rules_orden.png)
+
+
+
+
 
 
 
