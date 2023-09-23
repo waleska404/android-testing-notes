@@ -105,6 +105,27 @@
 	![mockk captor](./images/mockk_captor.png)
 
 
+## Problemática en los tests de ViewModels
+
+- En los ViewModels, podemos usar LiveData o StateFlow para gestionar el estado de forma eficiente y reactiva.
+
+- En el caso de LiveData tenemos dos principales para realizar los tests:
+	- Primer problema: LiveData siempre busca el `main thread` para ejecutar los observers. Esto falla en los tests, ya que los tests que se ejecutan en nuestra máquina, no tiene  en el hilo principal, y cuando los LiveData traten de buscar ese hilo principal en la ejecución de tests, dará error.
+		- Para solucionar esto, podemos incluir la siguiente la siguiente librería y utilizar la rule a continuación:
+			![livedata rule](./images/livedata_rule.png)
+		Con esto el LiveData utilizará el hilo del test, en vez de el principal.
+
+	- Segundo problema: para testear, observamos el LiveData, pero no tenemos un Lifecycle. El método `observe` del LiveData, pide un lifecycle owner, y esto no lo tenemos durante los tests.
+		- Para solucionar esto, en vez de utilizar el método `observe` utilizamos el `observeForever`. Esto lo que va a hacer es observar el LiveData durante todo el tiempo que dure el test.
+			![livedata observer](./images/livedata_observer.png)
+		Cada test tiene su propio contexto de ejecución. Cuando se ejecute un nuevo test, la anotación de `@Mock` creará un nuevo mock observer y por tanto cada test observará con un observer nuevo.
+
+- Problemas en el caso de StateFlows:
+	- Utilizan corrutinas:
+		- Las corrutinas se lanzan en el hilo principal (viewModelScope). Por tanto tenemos el mismo problema que con LiveData, no disponemos del hilo principal en el entorno de tests. Es decir, si lanzamos una corrutina utilizando el `MainDispatcher` esto nos producirá un error en tests.
+		- No tenemos control sobre los hilos secundarios (el resto de dispatchers: `DispatcherIO`, `DispatcherDefault`...): por tanto no es tan sencillo esperar a que acaben antes de que acabe el test y `runBlocking` no siempre es suficiente.
+	- Algunas propiedades de los StateFlows:
+		- Los StateFlows son `conflated`, esto quiere decir que los valores intermedios se pierden si el observador es más lento que el emisor. Esto a nivel de tests puede ser un inconveniente ya que a veces podemos necesitar saber cuales han sido los valores intermedios.
 
 
 
