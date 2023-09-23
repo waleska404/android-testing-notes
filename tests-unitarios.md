@@ -352,6 +352,19 @@
 	}
 	```
 
+## Turbine para testear Flows
+
+- Librería que nos va a permitir testear los flows de manera más sencilla.
+
+- Lo que hace principalmente es darnos una función sobre los flows llamada `test`. Esta función nos permite ir iterando sobre todos los valores que va devolviendo el flow de forma individual. De esta manera en los StateFlows eliminamos el problema de `conflate` en el que perdíamos valores intermedios.
+
+- Llamando a `awaitItem()` recuperamos el próximo valor del flow.
+	```
+	flowOf("one").test {
+		assertEquals("one", awaitItem())
+		awaitComplete()
+	}
+	```
 
 
 
