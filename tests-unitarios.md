@@ -70,10 +70,39 @@
 	![mockito captor](./images/mockito_captor.png)
 
 
+## MockK
 
+- Alternativa a Mockito enteramente escrita en Kotlin.
 
+- Tiene en cuenta las pequeñas diferencias que encontramos entre Kotlin y Java:
+	- MockK no da valores por defecto (exc. relaxed).
+	- Mejor gestión de nulos.
 
+- Para utilizarlo añadimos la librería:
+	![mockk libreria](./images/mockk_libreria.png)
 
+- Se puede utilizar con anotaciones o con DSL. (Hay una tendencia a utilizar Mockito siempre con anotaciones y MockK siempre con DSL, pero las dos soportan las dos opciones).
+
+- Como MockK no da valores por defecto, debemos mockear todas las funciones que vayan a ser llamadas, porque en Kotlin no existe el concepto de que una función no devuelva nada, cuando "no devuelve nada" en realidad devuelve `Unit`.
+
+- MockK con anotaciones:
+	- En vez de utilizar un runner especial, se utiliza una `Rule`. Para todas las clases de test donde vayamos a utilizar MockK mediante anotaciones tenemos que especificar la `MockKRule`. Esta rule será la encargada de inyectar los valores donde pongamos las anotaciones `@MockK`. 
+	- Finalmente en el setUp especificamos los valores que necesitamos de retorno.
+		![mockk anotaciones](./images/mockk_anotaciones.png)
+
+- MockK con DSL:
+	![mockk dsl](./images/mockk_dsl.png)
+
+- Verificaciones:
+	- Utilizamos las funciones, `verify` y `coVerify` para corrutinas.
+	![mockk verify](./images/mockk_verify.png)
+
+- En MockK por defecto los mocks no dan valores a las funciones ni a las properties. Existe una forma de MockK se comporte como Mockito en el sentido de que cuando no tengamos un valor de retorno para una función o propiedad, le de uno por defecto. Para esto utilizamos los siguientes argumentos al crear el mock: 
+	- `relaxed`: valores por defecto para todas las funciones y properties.
+	- `relaxedUnitFun`: valores por defecto solo para funciones que devuelven Unit.
+
+- Argument Captor: En este caso se llaman `Slots`. Creamos un slot del objeto que queremos capturar.
+	![mockk captor](./images/mockk_captor.png)
 
 
 
