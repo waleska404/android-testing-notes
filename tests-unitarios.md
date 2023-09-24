@@ -366,8 +366,13 @@
 	}
 	```
 
+## JUnit 4 vs JUnit 5
 
-
+- JUnit 5 fue lanzada en 2017. Tiene algunas mejoras en cuanto a funcionalidades respecto a JUnit 4:
+	- Con JUnit 5 podemos tener tests parametrizados. Nuestras funcines anotadas con `@Test` podrán tener argumentos.
+	- Las `Rules` desaparecen para convertirse en `Extensions`. 
+	- Hay ciertos cambios en las anotaciones.
+	- Solo podemos hacer tests unitarios, no tests instrumentados.
 
 
 
