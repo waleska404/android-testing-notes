@@ -4,4 +4,5 @@
 [2. INTRODUCCIÓN AL TESTING](./intro-testing.md)  
 [3. DOBLES DE TEST](./dobles-test.md)  
 [4. TESTS UNITARIOS](./tests-unitarios.md)  
-[5. TESTS INTEGRACIÓN](./tests-integracion.md)
+[5. TESTS INTEGRACIÓN](./tests-integracion.md)  
+[6. CONFIGURACIÓN DE HERRAMIENTAS PARA TESTS](./tests-herramientas.md)
