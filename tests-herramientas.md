@@ -12,3 +12,7 @@
   ![config instrumentacion](./images/config_instrumentacion.png)
   ![config instrumentacion](./images/config_instrumentacion_2.png)
   ![config instrumentacion](./images/config_instrumentacion_3.png)
+
+## Módulo para compartir código entre tests:
+  ![test shared](./images/test_shared_1.png)
+  ![test shared](./images/test_shared_2.png)
